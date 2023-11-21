@@ -97,6 +97,10 @@ void Renderer::setCursorPos(Coord _coord)
 
 void* Renderer::getBuffer(Color _color)
 {
+	if (_color == 255)
+	{
+		_color = 254;
+	}
 	double resolution = 255.0 / shades.size();
 	return shadesBuffer[_color / resolution].data();
 }
