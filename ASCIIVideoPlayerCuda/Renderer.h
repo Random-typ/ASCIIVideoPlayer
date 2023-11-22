@@ -6,6 +6,11 @@
 #include <Windows.h>
 #include <string>
 
+#include "AGIFF.h"
+
+#ifndef __RENDERER__
+#define __RENDERER__
+
 struct Coord {
 	uint64_t x;
 	uint64_t y;
@@ -77,3 +82,4 @@ private:
 	static std::string shades;
 };
 
+#endif // !__RENDERER__

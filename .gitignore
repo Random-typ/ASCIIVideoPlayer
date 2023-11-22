@@ -362,3 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /ASCIIVideoPlayer/opencv_world481d.dll
+/ASCIIVideoPlayerCuda/videos/how.mp4
+/ASCIIVideoPlayerCuda/videos/Rick Astley - Never Gonna Give You Up.mp4
+/ASCIIVideoPlayerCuda/opencv_world481d.dll
+/ASCIIVideoPlayerCuda/ASCIIVideoPlayerCuda.exe

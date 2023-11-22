@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{2b96edcb-b1ac-426d-9bf1-3a0fdf61002c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{f0ef10bc-a05d-4824-b46c-a085382be18b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{3170d377-c036-42d2-94b3-6884cc5c5876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Resource Files">
+      <UniqueIdentifier>{0a499d8f-418e-472e-8605-1d334b417180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Source Files">
+      <UniqueIdentifier>{00508303-3c79-4f38-abd4-759aa9d89280}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VideoPlayer.h">
+      <Filter>core\Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="frameCompute.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cudaFunctions.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AGIFF.h">
+      <Filter>core\Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>core\Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="VideoPlayer.cpp">
+      <Filter>core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="frameCompute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>core\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+  </ItemGroup>
+</Project>

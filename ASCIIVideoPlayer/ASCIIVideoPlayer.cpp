@@ -1,5 +1,3 @@
-#define EnableCudeAcceleration 1
-
 #include "VideoPlayer.h"
 
 
@@ -13,4 +11,7 @@ int main()
 	VideoPlayer::init();
 
 	VideoPlayer::playVideo("./videos/badapple!.mp4");
+
+	Renderer::freeBuffers();
+	return 0;
 }
