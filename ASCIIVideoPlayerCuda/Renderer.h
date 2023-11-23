@@ -74,7 +74,7 @@ public:
 	static void setCursorPos(Coord _coord);
 
 	static void* getBuffer(Color _color);
-private:
+//private:
 	static uint64_t width;
 
 	static std::vector<std::string> shadesBuffer;

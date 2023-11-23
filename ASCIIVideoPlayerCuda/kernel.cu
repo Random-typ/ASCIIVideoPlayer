@@ -10,35 +10,10 @@ namespace CudaFrameCompute {
         int i = threadIdx.x;
         for (int j = 0; j < *_width; j++)
         {
-            int offset = (*_p0) * i;
+            int offset = *_width * 3 * i + j * 3;
 
-            unsigned __int8 v1 = _frame[*_width * 3 * i + j * 3];
-            unsigned __int8 v2 = _frame[*_width * 3 * i + j * 3 + 1];
-            unsigned __int8 v3 = _frame[*_width * 3 * i + j * 3 + 2];
-
-
-
-            /*unsigned __int8* vec = &((_frame + (*_p0) * i))[j * 3];
-            int offset = (*_p0) * i + j * 3;
-
-            printf("v0%d\n", vec[0]);*/
-
-            //printf("p%d\n", *_p0);
-            //printf("f%d\n", _frame);
-            //printf("v%d\n", vec);
-            //printf("i%d\n", i);
-            //printf("j%d\n", j);
-            //printf("n%d\n", index);
-            //printf("v%d\n", _frame[20]);
-            //printf("t%d\n", _frame[index]);
-            //printf("t%d\n", _frame[(*_p0) * i + j * 3]);
-
-            //printf("v0%d\n", vec[0]);
-            //printf("v0%d\n", vec[1]);
-            //printf("v0%d\n", vec[2]);
-            
             // calculate grayscale
-            char color = (v1 + v2 + v3) / 3;
+            unsigned char color = (_frame[offset] + _frame[offset + 1] + _frame[offset + 2]) / 3;
             // find fitting ASCII character
             if (color == 255)
             {
@@ -73,11 +48,13 @@ namespace CudaFrameCompute {
         cudaMalloc(&shadesDevice, strlen(shades));
         cudaMalloc(&shadesDeviceLen, sizeof(int));
         
-        // set constants
+        // set constants these need to be copied once
         cudaMemcpy(width, &_width, sizeof(int), cudaMemcpyHostToDevice);
         cudaMemcpy(p0, &_frame.size.p[0], sizeof(size_t), cudaMemcpyHostToDevice);
         cudaMemcpy(shadesDevice, shades, strlen(shades), cudaMemcpyHostToDevice);
         cudaMemcpy(shadesDeviceLen, &shadesLen, sizeof(int), cudaMemcpyHostToDevice);
+        cudaMemcpy(CudaASCIIFrame, _ASCIIFrame.data(), _ASCIIFrame.size(), cudaMemcpyHostToDevice);
+
         return true;
     }
 
@@ -104,8 +81,6 @@ namespace CudaFrameCompute {
     {
         cudaError_t cudaErr;
         // copy image data
-        cudaMemcpy(CudaASCIIFrame, _ASCIIFrame.data(), _ASCIIFrame.size(), cudaMemcpyHostToDevice);
-        // copy ACII frame
         cudaMemcpy(frame, _frame.data, _frame.dataend - _frame.datastart, cudaMemcpyHostToDevice);
 
         // launch kernel
@@ -149,7 +124,7 @@ void playVideo(std::string _filePath, bool _cudaAccelEnabled)
 
     std::string textFrame;
 
-    int height = 80;
+    int height = 200;
     int width = vidCap.get(cv::CAP_PROP_FRAME_WIDTH) / vidCap.get(cv::CAP_PROP_FRAME_HEIGHT) * height;
 
     std::vector<int64_t> frameConvertTimes;

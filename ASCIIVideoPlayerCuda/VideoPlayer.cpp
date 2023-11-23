@@ -141,7 +141,16 @@ void VideoPlayer::computeFrame(cv::Mat& _resizedFrame, int _width, std::string& 
 			unsigned __int8 v4 = v1[j * 3 + 2];
 			unsigned __int8 v22 = _resizedFrame.data[_width * 3 * i + j * 3];
 
-			char pixel = ((char*)Renderer::getBuffer((v2 + v3 + v4) / 3))[0];
+			unsigned char pixel = (v2 + v3 + v4) / 3;
+			if (pixel == 255)
+			{
+				pixel = Renderer::shades[Renderer::shades.size() - 1];
+			}
+			else {
+				pixel = Renderer::shades[(int)(pixel / (255.0 / Renderer::shades.size()))];
+			}
+
+			//char pixel = ((char*)Renderer::getBuffer((v2 + v3 + v4) / 3))[0];
 			_textFrame[(_width * 2 + 1) * i + (j + 1) * 2] = pixel;
 			_textFrame[(_width * 2 + 1) * i + (j + 1) * 2 - 1] = pixel;
 		}
