@@ -113,8 +113,8 @@ void playVideo(std::string _filePath, bool _cudaAccelEnabled)
     cv::VideoCapture vidCap;
     // TODO: handle audio
 
-    vidCap.open(1); // CAM
-    //vidCap.open(_filePath, cv::CAP_FFMPEG);
+    //vidCap.open(1); // CAM
+    vidCap.open(_filePath, cv::CAP_FFMPEG);
 
     if (!vidCap.isOpened())
     {
@@ -124,7 +124,7 @@ void playVideo(std::string _filePath, bool _cudaAccelEnabled)
 
     std::string textFrame;
 
-    int height = 200;
+    int height = 500;
     int width = vidCap.get(cv::CAP_PROP_FRAME_WIDTH) / vidCap.get(cv::CAP_PROP_FRAME_HEIGHT) * height;
 
     std::vector<int64_t> frameConvertTimes;
@@ -137,6 +137,9 @@ void playVideo(std::string _filePath, bool _cudaAccelEnabled)
         textFrame[(width * 2 + 1) * i] = '\n';
     }
 
+    // measuring execute time
+    long double computeFramesTotal = 0;
+    long double printFramesTotal = 0;
 
     vidCap.get(cv::CAP_PROP_FRAME_COUNT);
     int frameTime = 1000 / vidCap.get(cv::CAP_PROP_FPS) * 1000;// frame time in MicroS
@@ -168,6 +171,8 @@ void playVideo(std::string _filePath, bool _cudaAccelEnabled)
         }
 
 
+        // measure execute time
+        auto computeFrameStart = std::chrono::high_resolution_clock::now();
         // create ASCII frame
         if (_cudaAccelEnabled)
         {// GPU
@@ -179,9 +184,15 @@ void playVideo(std::string _filePath, bool _cudaAccelEnabled)
         {// CPU
             VideoPlayer::computeFrame(frameResized, width, textFrame);
         }
+        computeFramesTotal = (std::chrono::high_resolution_clock::now() - computeFrameStart).count() / 1000;
+        std::string info = "Compute Time: " + std::to_string(computeFramesTotal) + " Print Time: " + std::to_string(printFramesTotal) + "                      ";
+        memcpy_s((void*)textFrame.data(), textFrame.size(), (void*)info.data(), info.size());
 
+        auto printFrameStart = std::chrono::high_resolution_clock::now();
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0, 0 });
         fwrite(textFrame.data(), textFrame.size(), 1, stdout);
+        printFramesTotal = (std::chrono::high_resolution_clock::now() - printFrameStart).count() / 1000;
+        
         // wait
         while ((std::chrono::high_resolution_clock::now() - startTime).count() / 1000 /* to MicroS */ < frameTime);
     }
@@ -201,7 +212,7 @@ int main()
 
 	VideoPlayer::init();
 
-	playVideo("./videos/badapple!.mp4", true);
+	playVideo("./videos/Rick Astley - Never Gonna Give You Up.mp4", true);
 
 	Renderer::freeBuffers();
     return 0;
